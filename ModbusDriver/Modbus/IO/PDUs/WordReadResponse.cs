@@ -5,22 +5,19 @@ using Modbus.IO.Interfaces;
 using Modbus.Validation;
 using Modbus.Extensions;
 
-namespace Modbus.IO
-{
-    public class WordReadResponse : ReadResponse, IWordResponse
-    {
+namespace Modbus.IO {
+    public class WordReadResponse : ReadResponse, IWordResponse {
         #region Fields
 
         private MBAPHeader _mbapCopy = null;
-        private ushort[] _values;        
+        private ushort[] _values;
 
         #endregion
 
         #region Constructor(s)
 
         public WordReadResponse(IReadRequest request)
-            : base(request)
-        {                       
+            : base(request) {
             _values = new ushort[request.Quantity];
 
             this.FunctionCode = request.FunctionCode;
@@ -37,8 +34,7 @@ namespace Modbus.IO
         /// <summary>
         /// Gets the values of the registers requested from the read request.
         /// </summary>
-        public ushort[] Values
-        {
+        public ushort[] Values {
             get { return _values; }
         }
 
@@ -51,21 +47,19 @@ namespace Modbus.IO
         /// This is the response package sent to the client.
         /// </summary>
         /// <returns></returns>
-        public override byte[] GetPackage()
-        {
+        public override byte[] GetPackage() {
             List<byte> bytes = new List<byte>();
 
             bytes.Add(FunctionCode);
             bytes.Add(ByteCount);
-            foreach (ushort val in this.Values)
-            {
+            foreach (ushort val in this.Values) {
                 bytes.AddRange(BitConverter.GetBytes(val).ChangeEndianness());
             }
 
             _mbapCopy.Length = (short)(bytes.Count + Validator.SizeOf(_mbapCopy.UnitId));
 
             bytes.InsertRange(0, _mbapCopy.ToBytes());
-            
+
             return bytes.ToArray();
         }
 

@@ -1,10 +1,8 @@
-﻿namespace Modbus.Enums
-{
+﻿namespace Modbus.Enums {
     /// <summary>
     /// Available function codes as defined in the Modbus specification.
     /// </summary>
-    public enum FunctionCode
-    {
+    public enum FunctionCode {
         ReadCoils = 0x01,
         ReadDiscreteInputs = 0x02,
         ReadHoldingRegisters = 0x03,

@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Modbus.Validation
-{
-    public static class Validator
-    {
+namespace Modbus.Validation {
+    public static class Validator {
         /// <summary>
         /// Determines if a value is defined in an enumeration.
         /// </summary>
         /// <param name="e"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool IsDefined(Enum e, int value)
-        {
+        public static bool IsDefined(Enum e, int value) {
             return Enum.IsDefined(e.GetType(), value);
         }
 
@@ -24,8 +21,7 @@ namespace Modbus.Validation
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static T GetInstance<T>()
-            where T : struct, IConvertible
-        {
+            where T : struct, IConvertible {
             return (T)Activator.CreateInstance(typeof(T));
         }
 
@@ -35,8 +31,7 @@ namespace Modbus.Validation
         /// <typeparam name="T"></typeparam>
         /// <param name="arg"></param>
         /// <returns></returns>
-        public static int SizeOf<T>(T arg)
-        {
+        public static int SizeOf<T>(T arg) {
             return Marshal.SizeOf(typeof(T));
         }
 
@@ -46,9 +41,8 @@ namespace Modbus.Validation
         /// </summary>
         /// <param name="address"></param>
         /// <returns></returns>
-        public static bool IsValidAddress(ushort address)
-        {
+        public static bool IsValidAddress(ushort address) {
             return (address >= ushort.MinValue) && (address <= ushort.MaxValue);
-        }       
+        }
     }
 }

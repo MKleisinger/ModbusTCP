@@ -1,7 +1,5 @@
-﻿namespace Modbus.IO.Interfaces
-{
-    public interface IBitResponse : IReadResponse
-    {
+﻿namespace Modbus.IO.Interfaces {
+    public interface IBitResponse : IReadResponse {
         /// <summary>
         /// Stores the values that indicate On/Off for
         /// the specified coils/inputs requested in the query.

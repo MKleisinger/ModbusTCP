@@ -5,10 +5,8 @@ using Modbus.Extensions;
 using Modbus.IO.Interfaces;
 using Modbus.Validation;
 
-namespace Modbus.IO
-{
-    public class MultiWriteResponse : IResponse
-    {
+namespace Modbus.IO {
+    public class MultiWriteResponse : IResponse {
         #region Fields
 
         private MBAPHeader _mbapCopy = null;
@@ -25,8 +23,7 @@ namespace Modbus.IO
 
         #region Constructor(s)
 
-        public MultiWriteResponse(IWriteRequest request)
-        {
+        public MultiWriteResponse(IWriteRequest request) {
             _mbapCopy = request.MBAP;
 
             this.FunctionCode = request.FunctionCode;
@@ -38,8 +35,7 @@ namespace Modbus.IO
 
         #region Transportation
 
-        public byte[] GetPackage()
-        {
+        public byte[] GetPackage() {
             List<byte> bytes = new List<byte>();
 
             bytes.Add(this.FunctionCode);

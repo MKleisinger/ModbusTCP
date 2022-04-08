@@ -1,4 +1,4 @@
-﻿using System.Collections;                     
+﻿using System.Collections;
 
 using Modbus.IO;
 using Modbus.IO.Interfaces;
@@ -7,23 +7,18 @@ using Modbus.Extensions;
 using Modbus.Factories;
 using Modbus.Validation;
 
-namespace Modbus.Tables
-{
-    public sealed class CoilsTable : BooleanTable
-    {
+namespace Modbus.Tables {
+    public sealed class CoilsTable : BooleanTable {
         /// <summary>
         /// Processes read/write requests sent from a Modbus master.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public override IResponse ProcessRequest(IRequest request)
-        {
-            if(!(request is IReadRequest))
-            {
+        public override IResponse ProcessRequest(IRequest request) {
+            if (!(request is IReadRequest)) {
                 return ProcessWriteRequest(request);
             }
-            else
-            {
+            else {
                 return base.ProcessRequest(request);
             }
         }
@@ -33,10 +28,8 @@ namespace Modbus.Tables
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        private IResponse ProcessWriteRequest(IRequest request)
-        {
-            switch ((FunctionCode)request.FunctionCode)
-            {
+        private IResponse ProcessWriteRequest(IRequest request) {
+            switch ((FunctionCode)request.FunctionCode) {
                 case FunctionCode.WriteSingleCoil:
                     this.Write(((ISingleWriteRequest)request).Address, ((ISingleWriteRequest)request).Value);
 
@@ -44,8 +37,7 @@ namespace Modbus.Tables
                     return request as IResponse;
                 case FunctionCode.WriteMultipleCoils:
                     BitArray bits = new BitArray(((MultiBitWriteRequest)request).Outputs);
-                    for (int i = 0; i < ((IWriteRequest)request).Quantity; ++i)
-                    {
+                    for (int i = 0; i < ((IWriteRequest)request).Quantity; ++i) {
                         BoolState state = Validator.GetInstance<BoolState>().ConvertToState(bits[i]);
                         this.Write((ushort)(((MultiBitWriteRequest)request).StartingAddress + i), (ushort)state);
                     }
@@ -60,8 +52,7 @@ namespace Modbus.Tables
         /// Identifies the abstract instance as the HoldingRegisters table
         /// </summary>
         /// <returns></returns>
-        public override ModbusTable GetTable()
-        {
+        public override ModbusTable GetTable() {
             return ModbusTable.Coils;
         }
     }

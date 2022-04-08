@@ -4,10 +4,8 @@ using Modbus.Enums;
 using Modbus.IO.Interfaces;
 using Modbus.Validation;
 
-namespace Modbus.IO
-{
-    public abstract class ReadResponse : IReadResponse
-    {
+namespace Modbus.IO {
+    public abstract class ReadResponse : IReadResponse {
         #region Fields
 
         IReadRequest _request;
@@ -18,8 +16,7 @@ namespace Modbus.IO
 
         #region Constructor(s)
 
-        public ReadResponse(IReadRequest request)
-        {
+        public ReadResponse(IReadRequest request) {
             _request = request;
         }
 
@@ -30,13 +27,10 @@ namespace Modbus.IO
         /// <summary>
         /// Gets or sets the function code that was specified in the modbus request.
         /// </summary>
-        public byte FunctionCode
-        {
+        public byte FunctionCode {
             get { return _functionCode; }
-            set
-            {
-                if(Validator.IsDefined(Activator.CreateInstance<FunctionCode>(), value))
-                {
+            set {
+                if (Validator.IsDefined(Activator.CreateInstance<FunctionCode>(), value)) {
                     _functionCode = value;
                 }
             }
@@ -45,10 +39,9 @@ namespace Modbus.IO
         /// <summary>
         /// Gets or sets the amount of bytes following the MBAP header.
         /// </summary>
-        public byte ByteCount
-        {
+        public byte ByteCount {
             get { return _byteCount; }
-            set { _byteCount = value; }            
+            set { _byteCount = value; }
         }
 
         #endregion
@@ -63,8 +56,7 @@ namespace Modbus.IO
         /// <param name="quantity"></param>
         /// <param name="width"></param>
         /// <returns></returns>
-        public virtual bool IsValidCount(int count, short quantity, ushort width)
-        {
+        public virtual bool IsValidCount(int count, short quantity, ushort width) {
             return count.Equals(quantity * width);
         }
 

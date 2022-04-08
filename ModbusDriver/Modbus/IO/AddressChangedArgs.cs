@@ -1,20 +1,16 @@
 ﻿using Modbus.Enums;
 
-namespace Modbus.IO
-{
-    public class AddressChangedArgs
-    {
+namespace Modbus.IO {
+    public class AddressChangedArgs {
         #region Constructor(s)
 
-        public AddressChangedArgs(ModbusTable table, ushort address, object value)
-        {
+        public AddressChangedArgs(ModbusTable table, ushort address, object value) {
             this.ModbusTable = table;
             this.Address = address;
             this.Value = value;
         }
 
-        public AddressChangedArgs(ModbusTable table, ushort address, object value, DataType dataType)
-        {            
+        public AddressChangedArgs(ModbusTable table, ushort address, object value, DataType dataType) {
             this.ModbusTable = table;
             this.Address = address;
             this.Value = value;

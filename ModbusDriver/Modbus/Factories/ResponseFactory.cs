@@ -2,22 +2,18 @@
 using Modbus.IO;
 using Modbus.IO.Interfaces;
 
-namespace Modbus.Factories
-{
-    public static class ResponseFactory
-    {
+namespace Modbus.Factories {
+    public static class ResponseFactory {
         /// <summary>
         /// Generates an instance of a Modbus response based on the function
         /// code defined in the request.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public static IResponse GetInstance(IRequest request)
-        {
+        public static IResponse GetInstance(IRequest request) {
             FunctionCode funcCode = (FunctionCode)request.FunctionCode;
 
-            switch (funcCode)
-            {
+            switch (funcCode) {
                 case FunctionCode.ReadCoils:
                 case FunctionCode.ReadDiscreteInputs:
                     return new BitReadResponse(request as IReadRequest);

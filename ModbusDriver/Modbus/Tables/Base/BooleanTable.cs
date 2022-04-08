@@ -6,19 +6,15 @@ using Modbus.Factories;
 using Modbus.IO;
 using Modbus.IO.Interfaces;
 
-namespace Modbus.Tables
-{
-    public abstract class BooleanTable : ModbusTable<bool>
-    {
+namespace Modbus.Tables {
+    public abstract class BooleanTable : ModbusTable<bool> {
         #region Initialization
 
-        public BooleanTable()
-        {
+        public BooleanTable() {
             Init();
         }
 
-        private void Init()
-        {
+        private void Init() {
             this.Table = TableFactory.Create<bool>();
         }
 
@@ -26,28 +22,23 @@ namespace Modbus.Tables
 
         #region Access
 
-        public override ushort Read(ushort register)
-        {
+        public override ushort Read(ushort register) {
             return (ushort)(this[register] ? 1 : 0);
         }
 
-        public virtual void Write(ushort register, ushort value)
-        {
-            if (IsValidValue((BoolState)value))
-            {
+        public virtual void Write(ushort register, ushort value) {
+            if (IsValidValue((BoolState)value)) {
                 bool proposedValue = Convert.ToBoolean(value);
 
-                if (this.Table[register] != proposedValue)
-                {
+                if (this.Table[register] != proposedValue) {
                     this.Table[register] = Convert.ToBoolean(value);
 
                     _notificationStream.OnNext(new AddressChangedArgs(this.GetTable(), register, value));
                 }
-            }            
+            }
         }
 
-        private bool this[ushort key]
-        {          
+        private bool this[ushort key] {
             get { return this.Table[key]; }
             set { this.Table[key] = value; }
         }
@@ -56,36 +47,30 @@ namespace Modbus.Tables
 
         #region Processing        
 
-        public override IResponse ProcessRequest(IRequest request)
-        {
-            if (request is IReadRequest)
-            {
+        public override IResponse ProcessRequest(IRequest request) {
+            if (request is IReadRequest) {
                 return ProcessReadRequest(request as IReadRequest);
             }
 
             return null;
         }
 
-        private IResponse ProcessReadRequest(IReadRequest readRequest)
-        {
+        private IResponse ProcessReadRequest(IReadRequest readRequest) {
             // Check for read request/Process it
-            switch ((FunctionCode)readRequest.FunctionCode)
-            {
+            switch ((FunctionCode)readRequest.FunctionCode) {
                 case FunctionCode.ReadCoils:
                 case FunctionCode.ReadDiscreteInputs:
                     // Process the read request
                     var response = ResponseFactory.GetInstance(readRequest);
 
-                    if(response is BitReadResponse)
-                    {
+                    if (response is BitReadResponse) {
                         BitArray bits = new BitArray(((IBitResponse)response).Status);
-                        for(int i = 0; i < readRequest.Quantity; ++i)
-                        {
+                        for (int i = 0; i < readRequest.Quantity; ++i) {
                             bits.Set(i, this.Table[(ushort)(readRequest.StartingAddress + i)]);
                         }
 
                         // copy bits back to the byte array
-                        bits.CopyTo(((IBitResponse)response).Status, 0); 
+                        bits.CopyTo(((IBitResponse)response).Status, 0);
                     }
 
                     return response;
@@ -103,13 +88,11 @@ namespace Modbus.Tables
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        private bool IsValidValue(BoolState value)
-        {
-            return (value.Equals(BoolState.On) || value.Equals(BoolState.Off));            
+        private bool IsValidValue(BoolState value) {
+            return (value.Equals(BoolState.On) || value.Equals(BoolState.Off));
         }
 
-        public override DataType GetValueType()
-        {
+        public override DataType GetValueType() {
             return DataType.Bool;
         }
 

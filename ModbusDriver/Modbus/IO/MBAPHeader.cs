@@ -4,10 +4,8 @@ using System.Linq;
 
 using Modbus.Extensions;
 
-namespace Modbus.IO
-{
-    public class MBAPHeader
-    {
+namespace Modbus.IO {
+    public class MBAPHeader {
         #region Read-only/Constant fields
 
         /// <summary>
@@ -19,13 +17,11 @@ namespace Modbus.IO
 
         #region Initialization
 
-        public MBAPHeader(byte[] mbap)
-        {
+        public MBAPHeader(byte[] mbap) {
             Init(mbap);
         }
 
-        private void Init(byte[] bytes)
-        {
+        private void Init(byte[] bytes) {
             this.TransactionId = GetShort(bytes, 0);
 
             this.ProtocolId = GetShort(bytes, 2);
@@ -72,8 +68,7 @@ namespace Modbus.IO
         /// converted to be in Big-Endian format.
         /// </summary>
         /// <returns></returns>
-        public byte[] ToBytes()
-        {
+        public byte[] ToBytes() {
             List<byte> bytes = new List<byte>();
 
             bytes.AddRange(BitConverter.GetBytes(this.TransactionId).ChangeEndianness());   // To Big-Endian format
@@ -90,8 +85,7 @@ namespace Modbus.IO
         /// <param name="bytes"></param>
         /// <param name="startIndex"></param>
         /// <returns></returns>
-        private short GetShort(byte[] bytes, int startIndex)
-        {
+        private short GetShort(byte[] bytes, int startIndex) {
             return BitConverter.ToInt16(bytes.GetRange(startIndex, sizeof(short))
                 .ToArray()
                 .ChangeEndianness(), 0); // To Little-Endian format

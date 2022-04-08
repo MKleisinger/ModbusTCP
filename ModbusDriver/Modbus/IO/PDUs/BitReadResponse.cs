@@ -3,10 +3,8 @@
 using Modbus.IO.Interfaces;
 using Modbus.Validation;
 
-namespace Modbus.IO
-{
-    public class BitReadResponse : ReadResponse, IBitResponse
-    {
+namespace Modbus.IO {
+    public class BitReadResponse : ReadResponse, IBitResponse {
         #region Constants
 
         private const int BitsInByte = 8;
@@ -24,8 +22,7 @@ namespace Modbus.IO
         #region Constructor(s)
 
         public BitReadResponse(IReadRequest request)
-            : base(request)
-        {
+            : base(request) {
             _status = new byte[GetInitialStatusLength(request.Quantity)];
 
             this.FunctionCode = request.FunctionCode;
@@ -49,8 +46,7 @@ namespace Modbus.IO
         /// * low order to high order in subsequent bytes.      *
         /// *****************************************************
         /// </summary>
-        public byte[] Status
-        {
+        public byte[] Status {
             get { return _status; }
         }
 
@@ -63,12 +59,10 @@ namespace Modbus.IO
         /// </summary>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        private int GetInitialStatusLength(int quantity)
-        {          
-            while(quantity % BitsInByte != 0)
-            {
+        private int GetInitialStatusLength(int quantity) {
+            while (quantity % BitsInByte != 0) {
                 quantity += 1;
-            }            
+            }
 
             return quantity / BitsInByte;
         }
@@ -81,8 +75,7 @@ namespace Modbus.IO
         /// Converts the response as transferable bytes that can be sent to the client.
         /// </summary>
         /// <returns></returns>
-        public override byte[] GetPackage()
-        {
+        public override byte[] GetPackage() {
             List<byte> bytes = new List<byte>();
 
             bytes.Add(FunctionCode);

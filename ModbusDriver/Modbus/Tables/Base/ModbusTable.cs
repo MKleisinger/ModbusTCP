@@ -8,10 +8,8 @@ using Modbus.Interfaces;
 using Modbus.IO;
 using Modbus.IO.Interfaces;
 
-namespace Modbus.Tables
-{
-    public abstract class ModbusTable<T> : INotifier<AddressChangedArgs>
-    {
+namespace Modbus.Tables {
+    public abstract class ModbusTable<T> : INotifier<AddressChangedArgs> {
         /// <summary>
         /// The hashtable storing register/value pairs
         /// </summary>
@@ -28,8 +26,7 @@ namespace Modbus.Tables
         /// <summary>
         /// Informs a subscriber that a particular register value has been changed.
         /// </summary>
-        public IObservable<AddressChangedArgs> NotificationStream
-        {
+        public IObservable<AddressChangedArgs> NotificationStream {
             get { return _notificationStream.AsObservable(); }
         }
 

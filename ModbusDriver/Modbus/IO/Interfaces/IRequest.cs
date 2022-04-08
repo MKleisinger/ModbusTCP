@@ -1,7 +1,5 @@
-﻿namespace Modbus.IO.Interfaces
-{
-    public interface IRequest
-    {
+﻿namespace Modbus.IO.Interfaces {
+    public interface IRequest {
         /// <summary>
         /// Gets or sets the MBAP header of the Modbus request.
         /// </summary>

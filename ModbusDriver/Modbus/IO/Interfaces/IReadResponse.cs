@@ -1,7 +1,5 @@
-﻿namespace Modbus.IO.Interfaces
-{
-    public interface IReadResponse : IResponse
-    {
+﻿namespace Modbus.IO.Interfaces {
+    public interface IReadResponse : IResponse {
         /// <summary>
         /// Defines the function code specified from the read request.
         /// </summary>
@@ -20,6 +18,6 @@
         /// <param name="quantity"></param>
         /// <param name="width"></param>
         /// <returns></returns>
-        bool IsValidCount(int count, short quantity, ushort width);       
+        bool IsValidCount(int count, short quantity, ushort width);
     }
 }

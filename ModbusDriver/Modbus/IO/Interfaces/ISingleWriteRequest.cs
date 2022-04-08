@@ -1,7 +1,5 @@
-﻿namespace Modbus.IO.Interfaces
-{
-    interface ISingleWriteRequest : IRequest
-    {
+﻿namespace Modbus.IO.Interfaces {
+    interface ISingleWriteRequest : IRequest {
         /// <summary>
         /// Specifies the address of the coil/register to write to.
         /// </summary>

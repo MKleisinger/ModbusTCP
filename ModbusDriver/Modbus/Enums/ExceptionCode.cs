@@ -1,10 +1,8 @@
-﻿namespace Modbus.Enums
-{
+﻿namespace Modbus.Enums {
     /// <summary>
     /// Available exception codes as defined in the Modbus specification.
     /// </summary>
-    public enum ExceptionCode
-    {
+    public enum ExceptionCode {
         IllegalFunction = 0x01,
         IllegalDataAddress = 0x02,
         IllegalDataValue = 0x03,

@@ -8,10 +8,8 @@ using Modbus.IO.Interfaces;
 using Modbus.Validation;
 using Modbus.Extensions;
 
-namespace Modbus.IO
-{
-    public class ReadRequest : IReadRequest
-    {
+namespace Modbus.IO {
+    public class ReadRequest : IReadRequest {
 
         #region Fields
 
@@ -25,16 +23,14 @@ namespace Modbus.IO
 
         public ReadRequest() { }
 
-        public ReadRequest(MBAPHeader mbap, byte funcCode, ushort startAddr, short quantity)
-        {
+        public ReadRequest(MBAPHeader mbap, byte funcCode, ushort startAddr, short quantity) {
             this.FunctionCode = funcCode;
             this.StartingAddress = startAddr;
             this.Quantity = quantity;
             this.MBAP = mbap;
         }
 
-        public ReadRequest(MBAPHeader mbap, byte[] requestBytes)
-        {
+        public ReadRequest(MBAPHeader mbap, byte[] requestBytes) {
             this.MBAP = mbap;
             InitFromBytes(requestBytes);
         }
@@ -43,8 +39,7 @@ namespace Modbus.IO
 
         #region Initialization
 
-        private void InitFromBytes(byte[] bytes)
-        {
+        private void InitFromBytes(byte[] bytes) {
             this.FunctionCode = bytes.First();
 
 
@@ -70,13 +65,10 @@ namespace Modbus.IO
         /// Gets or sets the descirption of the requested
         /// operation to be performed by the server.
         /// </summary>
-        public byte FunctionCode
-        {
+        public byte FunctionCode {
             get { return _functionCode; }
-            set
-            {
-                if (Validator.IsDefined(Activator.CreateInstance<FunctionCode>(), value))
-                {
+            set {
+                if (Validator.IsDefined(Activator.CreateInstance<FunctionCode>(), value)) {
                     _functionCode = value;
                 }
             }
@@ -88,13 +80,10 @@ namespace Modbus.IO
         /// 
         /// Valid Range is 0x0000 to 0XFFFF
         /// </summary>
-        public ushort StartingAddress
-        {
+        public ushort StartingAddress {
             get { return _startingAddress; }
-            set
-            {
-                if (Validator.IsValidAddress(value))
-                {
+            set {
+                if (Validator.IsValidAddress(value)) {
                     _startingAddress = value;
                 }
             }
@@ -104,13 +93,10 @@ namespace Modbus.IO
         /// Gets or sets the amount of registers for the 
         /// specified operation to perform.
         /// </summary>
-        public short Quantity
-        {
+        public short Quantity {
             get { return _quantity; }
-            set
-            {
-                if(IsValidQuantity(value))
-                {
+            set {
+                if (IsValidQuantity(value)) {
                     _quantity = value;
                 }
             }
@@ -129,8 +115,7 @@ namespace Modbus.IO
         /// </summary>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        public virtual bool IsValidQuantity(short quantity)
-        {
+        public virtual bool IsValidQuantity(short quantity) {
             return !(quantity < 0 || quantity > short.MaxValue);
         }
 

@@ -1,7 +1,5 @@
-﻿namespace Modbus.IO.Interfaces
-{
-    public interface IWriteRequest : IRequest
-    {
+﻿namespace Modbus.IO.Interfaces {
+    public interface IWriteRequest : IRequest {
         /// <summary>
         /// Defines the starting address of the request.
         /// </summary>

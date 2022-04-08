@@ -9,10 +9,8 @@ using Modbus.Factories;
 using Modbus.IO;
 using Modbus.IO.Interfaces;
 
-namespace Modbus.Server
-{
-    public class ClientHandler
-    {        
+namespace Modbus.Server {
+    public class ClientHandler {
         #region Fields
 
         private TcpClient _socketClient = null;
@@ -25,11 +23,10 @@ namespace Modbus.Server
 
         #region Constructor(s)
 
-        public ClientHandler(TcpClient client, ModbusServer serverRef)
-        {
+        public ClientHandler(TcpClient client, ModbusServer serverRef) {
             _serverReference = serverRef;
             _socketClient = client;
-            _clientID = Guid.NewGuid();            
+            _clientID = Guid.NewGuid();
 
             Start();
         }
@@ -38,8 +35,7 @@ namespace Modbus.Server
 
         #region Public Properties
 
-        public IObservable<IRequest> RequestStream
-        {
+        public IObservable<IRequest> RequestStream {
             get { return _requestStreamSubject.AsObservable(); }
         }
 
@@ -51,8 +47,7 @@ namespace Modbus.Server
         /// Starts the Read/Response tasks and subscribes to the 
         /// request stream.
         /// </summary>
-        private void Start()
-        {
+        private void Start() {
             this.RequestStream.Subscribe(r => QueueRequest(r));
             StartReadTask();
             StartResponseTask();
@@ -63,33 +58,26 @@ namespace Modbus.Server
         /// <summary>
         /// Starts the task to read client requests
         /// </summary>
-        private void StartReadTask()
-        {
-            Task.Factory.StartNew(() =>
-            {                
-                using (NetworkStream clientStream = _socketClient.GetStream())
-                {
-                    while (_socketClient.Connected)
-                    {
-                        if (clientStream.CanRead)
-                        {
+        private void StartReadTask() {
+            Task.Factory.StartNew(() => {
+                using (NetworkStream clientStream = _socketClient.GetStream()) {
+                    while (_socketClient.Connected) {
+                        if (clientStream.CanRead) {
                             byte[] mbapBytes = new byte[MBAPHeader.TotalBytes];
-                            if (DataReceived(clientStream, mbapBytes))
-                            {
+                            if (DataReceived(clientStream, mbapBytes)) {
                                 MBAPHeader mbap = new MBAPHeader(mbapBytes);
 
                                 // Get the rest of the data
                                 byte[] requestData = new byte[mbap.Length];
-                                if (DataReceived(clientStream, requestData))
-                                {
+                                if (DataReceived(clientStream, requestData)) {
                                     // Create the request
                                     IRequest request = RequestFactory.GetInstance(mbap, requestData);
-                                   
+
                                     // Queue the pending requesT
-                                    _requestStreamSubject.OnNext(request);                                    
+                                    _requestStreamSubject.OnNext(request);
                                 }
                             }
-                            
+
                             clientStream.Flush();
                             Task.Delay(10);
                         }
@@ -107,16 +95,11 @@ namespace Modbus.Server
         /// <summary>
         /// Starts the task to report the server response back to the client.
         /// </summary>
-        private void StartResponseTask()
-        {
-            Task.Factory.StartNew(() =>
-            {
-                using (NetworkStream clientStream = _socketClient.GetStream())
-                {
-                    while (_socketClient.Connected)
-                    {
-                        if (_pendingRequests.Count > 0 && clientStream.CanWrite)
-                        {
+        private void StartResponseTask() {
+            Task.Factory.StartNew(() => {
+                using (NetworkStream clientStream = _socketClient.GetStream()) {
+                    while (_socketClient.Connected) {
+                        if (_pendingRequests.Count > 0 && clientStream.CanWrite) {
                             // Dequeue the request
                             IRequest request = _pendingRequests.Dequeue();
 
@@ -127,7 +110,7 @@ namespace Modbus.Server
                             clientStream.Write(package, 0, package.Length);
                         }
 
-                        clientStream.Flush();                        
+                        clientStream.Flush();
                         Task.Delay(10);
                     }
                 }
@@ -144,8 +127,7 @@ namespace Modbus.Server
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <returns></returns>
-        private static bool DataReceived(NetworkStream stream, byte[] buffer, int offset = 0)
-        {
+        private static bool DataReceived(NetworkStream stream, byte[] buffer, int offset = 0) {
             return stream.Read(buffer, offset, buffer.Length) != 0;
         }
 
@@ -153,8 +135,7 @@ namespace Modbus.Server
         /// Enqueues a pending request.
         /// </summary>
         /// <param name="requestObserver"></param>
-        private void QueueRequest(object requestObserver)
-        {
+        private void QueueRequest(object requestObserver) {
             _pendingRequests.Enqueue(requestObserver as IRequest);
         }
 

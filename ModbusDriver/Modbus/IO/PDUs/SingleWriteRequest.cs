@@ -7,10 +7,8 @@ using Modbus.IO.Interfaces;
 using Modbus.Validation;
 using Modbus.Enums;
 
-namespace Modbus.IO
-{
-    public class SingleWriteRequest : ISingleWriteRequest, IResponse
-    {
+namespace Modbus.IO {
+    public class SingleWriteRequest : ISingleWriteRequest, IResponse {
         #region Fields
 
         private byte _functionCode = 0x05;
@@ -21,15 +19,13 @@ namespace Modbus.IO
 
         #region Initialization
 
-        public SingleWriteRequest(MBAPHeader mbap, byte[] data)
-        {
+        public SingleWriteRequest(MBAPHeader mbap, byte[] data) {
             this.MBAP = mbap;
 
             InitFromBytes(data);
         }
 
-        private void InitFromBytes(byte[] bytes)
-        {
+        private void InitFromBytes(byte[] bytes) {
             this.FunctionCode = bytes.First();
 
             this.Address = BitConverter.ToUInt16(bytes.GetRange(1, sizeof(ushort))
@@ -53,13 +49,10 @@ namespace Modbus.IO
         /// <summary>
         /// Gets or sets the function code specified in the modbus request.
         /// </summary>
-        public byte FunctionCode
-        {
+        public byte FunctionCode {
             get { return _functionCode; }
-            set
-            {
-                if (Validator.IsDefined(Activator.CreateInstance<FunctionCode>(), value))
-                {
+            set {
+                if (Validator.IsDefined(Activator.CreateInstance<FunctionCode>(), value)) {
                     _functionCode = value;
                 }
             }
@@ -69,13 +62,10 @@ namespace Modbus.IO
         /// Gets or sets the address of the coil/register that the modbus request has 
         /// specified for its target operation.
         /// </summary>
-        public ushort Address
-        {
+        public ushort Address {
             get { return _address; }
-            set
-            {
-                if(Validator.IsValidAddress(value))
-                {
+            set {
+                if (Validator.IsValidAddress(value)) {
                     _address = value;
                 }
             }
@@ -84,11 +74,9 @@ namespace Modbus.IO
         /// <summary>
         /// Gets or sets the value to write to the modbus coil/register.
         /// </summary>
-        public ushort Value
-        {
+        public ushort Value {
             get { return _value; }
-            set
-            {                
+            set {
                 _value = value;
             }
         }
@@ -102,8 +90,7 @@ namespace Modbus.IO
         /// The single write response is an echo of the request.
         /// </summary>
         /// <returns></returns>
-        public byte[] GetPackage()
-        {
+        public byte[] GetPackage() {
             List<byte> bytes = new List<byte>();
 
             bytes.Add(FunctionCode);

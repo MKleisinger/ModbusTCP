@@ -10,16 +10,15 @@ using Modbus.IO.Interfaces;
 using Modbus.IO;
 using Modbus.Tables;
 using Modbus.Enums;
+using System.Configuration;
 
-namespace Modbus.Server
-{
-    public class ModbusServer
-    {
+namespace Modbus.Server {
+    public class ModbusServer {
         #region Fields        
 
-        private ushort _port = 502;
+        private ushort _port = Convert.ToUInt16(ConfigurationManager.AppSettings["Port"]);
         private bool _isListening = false;
-        private TcpListener _listener = null;        
+        private TcpListener _listener = null;
         private Task _listenTask = null;
         private CancellationTokenSource _tokenSource = new CancellationTokenSource();
         private CancellationToken _cancelToken;
@@ -39,14 +38,12 @@ namespace Modbus.Server
 
         #region Constructor(s)
 
-        public ModbusServer(ushort port, bool startOnInit = true)
-        {
+        public ModbusServer(ushort port, bool startOnInit = true) {
             _cancelToken = _tokenSource.Token;
 
             _port = port;
 
-            if(startOnInit)
-            {
+            if (startOnInit) {
                 this.StartListening();
             }
 
@@ -64,8 +61,7 @@ namespace Modbus.Server
         /// Specifies the port that the server will listen on.
         /// Default port is 502 for Modbus.
         /// </summary>
-        public ushort Port
-        {
+        public ushort Port {
             get { return _port; }
             set { _port = value; }
         }
@@ -73,8 +69,7 @@ namespace Modbus.Server
         /// <summary>
         /// Indicates whether or not the server is currently running.
         /// </summary>
-        public bool IsListening
-        {
+        public bool IsListening {
             get { return _isListening; }
         }
 
@@ -83,8 +78,7 @@ namespace Modbus.Server
         #region Notification Stream
 
         private Subject<object> _notificationSubject = new Subject<object>();
-        public IObservable<object> NotificationStream
-        {
+        public IObservable<object> NotificationStream {
             get { return _notificationSubject.AsObservable(); }
         }
 
@@ -95,19 +89,15 @@ namespace Modbus.Server
         /// <summary>
         /// Starts listening for client connections on the specified port.
         /// </summary>
-        public void StartListening()
-        {            
+        public void StartListening() {
             _listener = new TcpListener(IPAddress.Any, this.Port);
 
-            _listenTask = Task.Factory.StartNew(() =>
-            {
+            _listenTask = Task.Factory.StartNew(() => {
                 _listener.Start();
                 _isListening = true;
 
-                while (_listener != null)
-                {
-                    if (_cancelToken.IsCancellationRequested)
-                    {
+                while (_listener != null) {
+                    if (_cancelToken.IsCancellationRequested) {
                         _cancelToken.ThrowIfCancellationRequested();
                     }
 
@@ -116,18 +106,16 @@ namespace Modbus.Server
                     _clientConnectedEvent.WaitOne();
                     _clientConnectedEvent.Reset();
 
-                    Task.Delay(10);                    
-                }                                
+                    Task.Delay(10);
+                }
             }, _tokenSource.Token);
         }
 
         /// <summary>
         /// Stops listening for client connections.
         /// </summary>
-        public void StopListening()
-        {
-            if (_listener != null)
-            {
+        public void StopListening() {
+            if (_listener != null) {
                 _tokenSource.Cancel();
 
                 _listener.Stop();
@@ -141,21 +129,17 @@ namespace Modbus.Server
         /// Create a ClientHandler for inbound clients to handle the communcation layer.
         /// </summary>
         /// <param name="result"></param>
-        public void AcceptClientCallback(IAsyncResult result)
-        {
-            try
-            {
+        public void AcceptClientCallback(IAsyncResult result) {
+            try {
                 TcpListener listener = (TcpListener)result.AsyncState;
                 TcpClient client = listener.EndAcceptTcpClient(result);
 
-                ClientHandler handler = new ClientHandler(client, this);                
+                ClientHandler handler = new ClientHandler(client, this);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Console.WriteLine(ex.Message);
             }
-            finally
-            {
+            finally {
                 _clientConnectedEvent.Set();
             }
         }
@@ -169,11 +153,9 @@ namespace Modbus.Server
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        internal IResponse HandleRequest(IRequest request)
-        {
+        internal IResponse HandleRequest(IRequest request) {
             IResponse serverResponse = null;
-            switch ((FunctionCode)request.FunctionCode)
-            {
+            switch ((FunctionCode)request.FunctionCode) {
                 case FunctionCode.ReadCoils:
                 case FunctionCode.WriteSingleCoil:
                 case FunctionCode.WriteMultipleCoils:
@@ -196,7 +178,7 @@ namespace Modbus.Server
                         new InvalidOperationException(string.Format("Function Code {0} is not supported.", request.FunctionCode))
                     );
 
-                    break;                
+                    break;
             }
 
             return serverResponse;
@@ -206,8 +188,7 @@ namespace Modbus.Server
         /// Send address changed arguments to subscribed clients.
         /// </summary>
         /// <param name="args"></param>
-        public void NotifyChanged(AddressChangedArgs args)
-        {
+        public void NotifyChanged(AddressChangedArgs args) {
             _notificationSubject.OnNext(args);
         }
 

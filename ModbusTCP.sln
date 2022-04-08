@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusDriver", "ModbusDriver\ModbusDriver.csproj", "{31FEB3DE-722D-4531-9936-090A4BE50C2B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusServerHost", "ModbusServerHost\ModbusServerHost.csproj", "{EAA0647A-DCF5-4D55-A2EE-C4336E2E60C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +15,11 @@ Global
 		{31FEB3DE-722D-4531-9936-090A4BE50C2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31FEB3DE-722D-4531-9936-090A4BE50C2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31FEB3DE-722D-4531-9936-090A4BE50C2B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EAA0647A-DCF5-4D55-A2EE-C4336E2E60C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EAA0647A-DCF5-4D55-A2EE-C4336E2E60C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EAA0647A-DCF5-4D55-A2EE-C4336E2E60C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EAA0647A-DCF5-4D55-A2EE-C4336E2E60C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BA64B60B-2F59-40CA-BF17-7962E98C59DC}
 	EndGlobalSection
 EndGlobal

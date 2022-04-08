@@ -3,10 +3,8 @@
 using Modbus.Enums;
 using Modbus.Validation;
 
-namespace Modbus.IO
-{
-    public class ExceptionResponse
-    {
+namespace Modbus.IO {
+    public class ExceptionResponse {
         #region Fields
 
         private byte _exceptionCode = 0x01;
@@ -25,13 +23,10 @@ namespace Modbus.IO
         /// Example: 0x01 (Read Coils Function) error
         /// code would be 0x51 (0x01 + 0x50).
         /// </summary>
-        public byte ErrorCode
-        {
+        public byte ErrorCode {
             get { return _errorCode; }
-            set
-            {
-                if(IsValidError(value))
-                {
+            set {
+                if (IsValidError(value)) {
                     _errorCode = value;
                 }
             }
@@ -41,14 +36,11 @@ namespace Modbus.IO
         /// Gets or sets the identifier to indicate 
         /// a particular exception error.
         /// </summary>
-        public byte ExceptionCode
-        {
+        public byte ExceptionCode {
             get { return _exceptionCode; }
-            set
-            {
-                if (Validator.IsDefined(Activator.CreateInstance<ExceptionCode>(), value))
-                {
-                    _exceptionCode = value;                    
+            set {
+                if (Validator.IsDefined(Activator.CreateInstance<ExceptionCode>(), value)) {
+                    _exceptionCode = value;
                 }
             }
         }
@@ -62,8 +54,7 @@ namespace Modbus.IO
         /// </summary>
         /// <param name="code"></param>
         /// <returns></returns>
-        public static bool IsValidError(int code)
-        {
+        public static bool IsValidError(int code) {
             return Validator.IsDefined(Activator.CreateInstance<ExceptionCode>(), code - 0x50) || code.Equals(0x83);
         }
 

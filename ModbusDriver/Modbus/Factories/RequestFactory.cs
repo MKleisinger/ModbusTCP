@@ -4,10 +4,8 @@ using Modbus.IO;
 using Modbus.IO.Interfaces;
 using Modbus.Enums;
 
-namespace Modbus.Factories
-{
-    public static class RequestFactory
-    {
+namespace Modbus.Factories {
+    public static class RequestFactory {
         /// <summary>
         /// Generates an instance of the Modbus request based on the
         /// defined function code in the data bytes.
@@ -15,12 +13,10 @@ namespace Modbus.Factories
         /// <param name="mbap"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static IRequest GetInstance(MBAPHeader mbap, byte[] data)
-        {
+        public static IRequest GetInstance(MBAPHeader mbap, byte[] data) {
             FunctionCode funcCode = (FunctionCode)data.First();
-            
-            switch(funcCode)
-            {
+
+            switch (funcCode) {
                 case FunctionCode.ReadCoils:
                 case FunctionCode.ReadDiscreteInputs:
                 case FunctionCode.ReadHoldingRegisters:
@@ -35,7 +31,7 @@ namespace Modbus.Factories
                     return new MultiBitWriteRequest(mbap, data);
                 default:
                     return null;
-            } 
+            }
         }
     }
 }

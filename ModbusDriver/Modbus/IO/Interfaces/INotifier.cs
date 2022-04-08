@@ -1,9 +1,7 @@
 ﻿using System;
 
-namespace Modbus.Interfaces
-{
-    public interface INotifier<T>
-    {
+namespace Modbus.Interfaces {
+    public interface INotifier<T> {
         /// <summary>
         /// Gets a stream for publishing notifications 
         /// that objects can subscribe to.
